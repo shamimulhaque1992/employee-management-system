@@ -32,10 +32,11 @@ const Navbar: React.FC<NavbarProps> = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 p-4 text-gray-800 dark:text-white flex justify-between items-center shadow-md dark:shadow-none border-b border-gray-200 dark:border-gray-700 relative ">
+    <nav className="bg-white dark:bg-gray-800 p-4 text-gray-800 dark:text-white flex justify-between items-center shadow-md dark:shadow-none border-b border-gray-200 dark:border-gray-700 relative">
       <div className="flex items-center">
         <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-          Employee Management System
+          <span className="md:hidden">EMS</span>
+          <span className="hidden md:inline">Employee Management System</span>
         </h1>
       </div>
       <div className="relative">
