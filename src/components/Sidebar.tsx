@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       <div className="flex justify-center items-center mb-20">
         <div className="flex flex-col items-center">
           <img
-            src="/src/assets/images/performance.png"
+            src="/assets/images/performance.png"
             className={`${isOpen ? "max-w-24" : "max-w-12"}`}
             alt="EMS Logo"
           />
