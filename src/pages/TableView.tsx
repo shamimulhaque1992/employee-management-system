@@ -10,6 +10,7 @@ import Modal from "../components/Modal";
 import axios from "axios";
 import { Plus } from "lucide-react";
 import SearchBar from "../components/SearchBar";
+import { Employee } from "../types/employee";
 
 const employeeSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -95,6 +96,11 @@ const TableView: React.FC = () => {
     }
   };
 
+  const handleModalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit(handleAddEmployeeSubmit)(e);
+  };
+
   if (loading) return <TableSkeleton />;
 
   return (
@@ -111,7 +117,7 @@ const TableView: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit(handleAddEmployeeSubmit)}
+        onSubmit={handleModalSubmit}
         isUpdate={false}
       >
         <h2 className="text-xl font-bold mb-4">Add Employee</h2>

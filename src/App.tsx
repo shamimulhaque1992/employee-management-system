@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import CardView from "./pages/CardView";
 import TableView from "./pages/TableView";
-import React, { useState } from "react";
+import { useState } from "react";
 import EmployeeDetails from "./pages/EmployeeDetails";
 
 function App() {

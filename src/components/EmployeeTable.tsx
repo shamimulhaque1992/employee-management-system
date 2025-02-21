@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Modal from "./Modal";
 import axios from "axios";
 import { FilePenLine, UserRoundX } from "lucide-react";
+import { Employee } from "../types/employee";
 
 const employeeSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -14,24 +15,10 @@ const employeeSchema = z.object({
   address: z.string().min(1, "Address is required"),
 });
 
-interface Employee {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  address: {
-    street: string;
-    suite?: string;
-    city: string;
-    zipcode: string;
-  };
-  profilePicture?: string;
-}
-
 interface EmployeeTableProps {
   employees: Employee[];
   onDelete: (id: number) => void;
-  onUpdate: (updatedEmployee: Employee) => void; // New prop for updating employee
+  onUpdate: (updatedEmployee: Employee) => void;
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
@@ -110,6 +97,11 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         toast.error("Failed to update employee.");
       }
     }
+  };
+
+  const handleModalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit((data) => handleFormSubmit(data))(e);
   };
 
   return (
@@ -199,7 +191,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         <Modal
           isOpen={!!editingEmployee}
           onClose={() => setEditingEmployee(null)}
-          onSubmit={handleSubmit((data) => handleFormSubmit(data))}
+          onSubmit={handleModalSubmit}
           isUpdate={true}
         >
           <h2 className="text-xl font-bold">Edit Employee</h2>
