@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Modal from "./Modal";
+import ConfirmationModal from "./ConfirmationModal";
 import axios from "axios";
 import { FilePenLine, UserRoundX } from "lucide-react";
 import { Employee } from "../types/employee";
@@ -27,6 +28,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
   onUpdate,
 }) => {
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [deletingEmployee, setDeletingEmployee] = useState<Employee | null>(null);
   const {
     register,
     handleSubmit,
@@ -36,10 +38,14 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
     resolver: zodResolver(employeeSchema),
   });
 
-  const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      onDelete(id);
-      toast.success("Employee deleted successfully!");
+  const handleDelete = (employee: Employee) => {
+    setDeletingEmployee(employee);
+  };
+
+  const confirmDelete = () => {
+    if (deletingEmployee) {
+      onDelete(deletingEmployee.id);
+      setDeletingEmployee(null);
     }
   };
 
@@ -61,7 +67,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
   }) => {
     if (editingEmployee) {
       try {
-        const response = await axios.put(
+        await axios.put(
           `https://jsonplaceholder.typicode.com/users/${editingEmployee.id}`,
           {
             name: data.name,
@@ -75,8 +81,6 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
             },
           }
         );
-        console.log("Updating employee:", response.data);
-        toast.success("Employee updated successfully!");
 
         const updatedEmployee = {
           ...editingEmployee,
@@ -90,11 +94,19 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         };
 
         onUpdate(updatedEmployee);
-
         setEditingEmployee(null);
         reset();
-      } catch {
-        toast.error("Failed to update employee.");
+        toast.success(`${data.name}'s information has been updated successfully!`, {
+          duration: 3000,
+          position: 'top-right',
+        });
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          toast.error(`Failed to update employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
+            duration: 4000,
+            position: 'top-right',
+          });
+        }
       }
     }
   };
@@ -172,7 +184,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
                     />
                   </button>
                   <button
-                    onClick={() => handleDelete(employee.id)}
+                    onClick={() => handleDelete(employee)}
                     className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 transition-colors duration-200 group"
                     title="Delete Employee"
                   >
@@ -231,6 +243,13 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
           )}
         </Modal>
       )}
+      <ConfirmationModal
+        isOpen={!!deletingEmployee}
+        onClose={() => setDeletingEmployee(null)}
+        onConfirm={confirmDelete}
+        title="Delete Employee"
+        message={`Are you sure you want to delete ${deletingEmployee?.name}? This action cannot be undone.`}
+      />
     </div>
   );
 };

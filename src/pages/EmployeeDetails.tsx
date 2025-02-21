@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoadingIndicator from "../components/LoadingIndicator";
+import ErrorDisplay from "../components/ErrorDisplay";
 import {
   ArrowLeft,
   Globe,
@@ -46,16 +47,12 @@ const EmployeeDetails: React.FC = () => {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        console.log("id", id);
         const response = await axios.get(
           `https://jsonplaceholder.typicode.com/users/${id}`
         );
-        console.log("res", response.status);
-        console.log("res data", response.data);
         setEmployee(response.data);
       } catch (err) {
-        console.error("Error fetching employee:", err);
-        setError("Failed to fetch employee details");
+        setError("Failed to fetch employee details. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -65,9 +62,8 @@ const EmployeeDetails: React.FC = () => {
   }, [id]);
 
   if (loading) return <LoadingIndicator />;
-  if (error) return <div className="text-red-500 text-center p-4">{error}</div>;
-  if (!employee)
-    return <div className="text-center p-4">Employee not found</div>;
+  if (error) return <ErrorDisplay message={error} />;
+  if (!employee) return <ErrorDisplay message="Employee not found" />;
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 p-4 md:p-6 lg:p-8">

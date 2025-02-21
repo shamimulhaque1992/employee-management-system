@@ -11,6 +11,7 @@ import axios from "axios";
 import { Plus } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import { Employee } from "../types/employee";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const employeeSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -20,7 +21,7 @@ const employeeSchema = z.object({
 });
 
 const TableView: React.FC = () => {
-  const { employees, loading } = useEmployees();
+  const { employees, loading, error } = useEmployees();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [employeeList, setEmployeeList] = useState(employees);
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,15 +39,24 @@ const TableView: React.FC = () => {
   );
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      try {
-        await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
-        toast.success("Employee deleted successfully!");
-        setEmployeeList((prevEmployees) =>
-          prevEmployees.filter((employee) => employee.id !== id)
-        );
-      } catch (error) {
-        toast.error("Failed to delete employee.");
+    try {
+      await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+      const deletedEmployee = employeeList.find(emp => emp.id === id);
+      setEmployeeList((prevEmployees) =>
+        prevEmployees.filter((employee) => employee.id !== id)
+      );
+      if (deletedEmployee) {
+        toast.success(`${deletedEmployee.name} has been deleted successfully!`, {
+          duration: 3000,
+          position: 'top-right',
+        });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(`Failed to delete employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
+          duration: 4000,
+          position: 'top-right',
+        });
       }
     }
   };
@@ -84,14 +94,19 @@ const TableView: React.FC = () => {
           },
         }
       );
-      console.log("Adding employee:", response.data);
       setEmployeeList([response.data, ...employeeList]);
       reset();
-      toast.success("Employee added successfully!");
       setIsModalOpen(false);
+      toast.success(`${data.name} has been added successfully!`, {
+        duration: 3000,
+        position: 'top-right',
+      });
     } catch (error) {
-      if (axios.isAxiosError(error)) { // Fixed: Added closing parenthesis
-        toast.error("Failed to add employee.");
+      if (axios.isAxiosError(error)) {
+        toast.error(`Failed to add employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
+          duration: 4000,
+          position: 'top-right',
+        });
       }
     }
   };
@@ -102,6 +117,7 @@ const TableView: React.FC = () => {
   };
 
   if (loading) return <TableSkeleton />;
+  if (error) return <ErrorDisplay message={error.message} />;
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">

@@ -3,6 +3,7 @@ import EmployeeCard from "../components/EmployeeCard";
 import useEmployees from "../hooks/useEmployees";
 import CardSkeleton from "../components/CardSkeleton";
 import SearchBar from "../components/SearchBar";
+import ErrorDisplay from "../components/ErrorDisplay";
 
 const CardView: React.FC = () => {
   const { employees, loading, error } = useEmployees();
@@ -17,7 +18,7 @@ const CardView: React.FC = () => {
   );
 
   if (loading) return <CardSkeleton />;
-  if (error) return <div>Error fetching employees: {error.message}</div>;
+  if (error) return <ErrorDisplay message={error.message} />;
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
