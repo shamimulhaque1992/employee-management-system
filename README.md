@@ -14,6 +14,15 @@ A modern, responsive Employee Management System built with React, TypeScript, an
   - Table View: Detailed information with sorting and responsive columns
   - Detailed Employee View: Comprehensive employee information
 
+- **Advanced Search & Filter**
+  - Real-time search functionality across employee names
+  - Advanced filtering options:
+    - Sort by name (A-Z and Z-A)
+    - Sort by email (A-Z and Z-A)
+    - Combined search and filter operations
+  - Persistent filter states
+  - Responsive filter dropdown with dark mode support
+
 - **Dark Mode Support**
   - System-wide dark mode toggle
   - Persistent theme preference
@@ -47,14 +56,21 @@ A modern, responsive Employee Management System built with React, TypeScript, an
 2. **State Management**
    - Efficient React state updates
    - Optimized re-renders using proper component structure
+   - Memoized search and filter operations
    - Controlled component updates
 
-3. **Asset Optimization**
+3. **Search & Filter Optimizations**
+   - Debounced search input for performance
+   - Memoized filter results
+   - Efficient sorting algorithms
+   - Optimized state updates for real-time filtering
+
+4. **Asset Optimization**
    - Responsive images
    - Optimized icon imports from Lucide React
    - CSS optimization with Tailwind
 
-4. **UI/UX Optimizations**
+5. **UI/UX Optimizations**
    - Skeleton loaders for better perceived performance
    - Debounced search inputs
    - Optimized table rendering for large datasets
