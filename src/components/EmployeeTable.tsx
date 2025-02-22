@@ -28,7 +28,9 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
   onUpdate,
 }) => {
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
-  const [deletingEmployee, setDeletingEmployee] = useState<Employee | null>(null);
+  const [deletingEmployee, setDeletingEmployee] = useState<Employee | null>(
+    null
+  );
   const {
     register,
     handleSubmit,
@@ -96,16 +98,24 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
         onUpdate(updatedEmployee);
         setEditingEmployee(null);
         reset();
-        toast.success(`${data.name}'s information has been updated successfully!`, {
-          duration: 3000,
-          position: 'top-right',
-        });
+        toast.success(
+          `${data.name}'s information has been updated successfully!`,
+          {
+            duration: 3000,
+            position: "top-right",
+          }
+        );
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          toast.error(`Failed to update employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
-            duration: 4000,
-            position: 'top-right',
-          });
+          toast.error(
+            `Failed to update employee: ${
+              error.response?.data?.message || "Unknown error occurred"
+            }`,
+            {
+              duration: 4000,
+              position: "top-right",
+            }
+          );
         }
       }
     }
@@ -118,87 +128,89 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 
   return (
     <div>
-      <table className="min-w-full border-collapse border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-gray-200 dark:bg-gray-700">
-          <tr>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Profile Picture
-            </th>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Name
-            </th>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Phone
-            </th>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Email
-            </th>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Address
-            </th>
-            <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((employee) => (
-            <tr
-              key={employee.id}
-              className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              <td className="border border-gray-300 dark:border-gray-600 p-2">
-                <img
-                  src={
-                    employee.profilePicture ||
-                    "https://avatar.iran.liara.run/public/boy"
-                  }
-                  alt={employee.name}
-                  className="w-16 h-16 rounded-full"
-                />
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium text-gray-800 dark:text-white">
-                {employee.name}
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-                {employee.phone}
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-                {employee.email}
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white">
-                {employee.address.street}{" "}
-                {employee.address.suite ? `(${employee.address.suite})` : ""},{" "}
-                {employee.address.city}, {employee.address.zipcode}
-              </td>
-              <td className="border border-gray-300 dark:border-gray-600 p-2">
-                <div className="flex justify-center items-center gap-3">
-                  <button
-                    onClick={() => handleEdit(employee)}
-                    className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors duration-200 group"
-                    title="Edit Employee"
-                  >
-                    <FilePenLine
-                      size={20}
-                      className="text-blue-600 dark:text-blue-400 group-hover:text-blue-800 dark:group-hover:text-blue-300 transition-colors duration-200"
-                    />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(employee)}
-                    className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 transition-colors duration-200 group"
-                    title="Delete Employee"
-                  >
-                    <UserRoundX
-                      size={20}
-                      className="text-red-600 dark:text-red-400 group-hover:text-red-800 dark:group-hover:text-red-300 transition-colors duration-200"
-                    />
-                  </button>
-                </div>
-              </td>
+      <div className="overflow-x-auto pb-5">
+        <table className=" w-full border-collapse border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-gray-200 dark:bg-gray-700">
+            <tr>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Profile Picture
+              </th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Name
+              </th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Phone
+              </th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Email
+              </th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Address
+              </th>
+              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {employees.map((employee) => (
+              <tr
+                key={employee.id}
+                className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <td className="border border-gray-300 dark:border-gray-600 p-2 whitespace-nowrap">
+                  <img
+                    src={
+                      employee.profilePicture ||
+                      "https://avatar.iran.liara.run/public/boy"
+                    }
+                    alt={employee.name}
+                    className="w-16 h-16 rounded-full"
+                  />
+                </td>
+                <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium text-gray-800 dark:text-white whitespace-nowrap">
+                  {employee.name}
+                </td>
+                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                  {employee.phone}
+                </td>
+                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                  {employee.email}
+                </td>
+                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                  {employee.address.street}{" "}
+                  {employee.address.suite ? `(${employee.address.suite})` : ""},{" "}
+                  {employee.address.city}, {employee.address.zipcode}
+                </td>
+                <td className="border border-gray-300 dark:border-gray-600 p-2 whitespace-nowrap">
+                  <div className="flex justify-center items-center gap-3">
+                    <button
+                      onClick={() => handleEdit(employee)}
+                      className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors duration-200 group"
+                      title="Edit Employee"
+                    >
+                      <FilePenLine
+                        size={20}
+                        className="text-blue-600 dark:text-blue-400 group-hover:text-blue-800 dark:group-hover:text-blue-300 transition-colors duration-200"
+                      />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(employee)}
+                      className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900 transition-colors duration-200 group"
+                      title="Delete Employee"
+                    >
+                      <UserRoundX
+                        size={20}
+                        className="text-red-600 dark:text-red-400 group-hover:text-red-800 dark:group-hover:text-red-300 transition-colors duration-200"
+                      />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {editingEmployee && (
         <Modal
           isOpen={!!editingEmployee}

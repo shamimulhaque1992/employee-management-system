@@ -41,22 +41,30 @@ const TableView: React.FC = () => {
   const handleDelete = async (id: number) => {
     try {
       await axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
-      const deletedEmployee = employeeList.find(emp => emp.id === id);
+      const deletedEmployee = employeeList.find((emp) => emp.id === id);
       setEmployeeList((prevEmployees) =>
         prevEmployees.filter((employee) => employee.id !== id)
       );
       if (deletedEmployee) {
-        toast.success(`${deletedEmployee.name} has been deleted successfully!`, {
-          duration: 3000,
-          position: 'top-right',
-        });
+        toast.success(
+          `${deletedEmployee.name} has been deleted successfully!`,
+          {
+            duration: 3000,
+            position: "top-right",
+          }
+        );
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error(`Failed to delete employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
-          duration: 4000,
-          position: 'top-right',
-        });
+        toast.error(
+          `Failed to delete employee: ${
+            error.response?.data?.message || "Unknown error occurred"
+          }`,
+          {
+            duration: 4000,
+            position: "top-right",
+          }
+        );
       }
     }
   };
@@ -69,7 +77,12 @@ const TableView: React.FC = () => {
     );
   };
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(employeeSchema),
   });
 
@@ -99,14 +112,19 @@ const TableView: React.FC = () => {
       setIsModalOpen(false);
       toast.success(`${data.name} has been added successfully!`, {
         duration: 3000,
-        position: 'top-right',
+        position: "top-right",
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        toast.error(`Failed to add employee: ${error.response?.data?.message || 'Unknown error occurred'}`, {
-          duration: 4000,
-          position: 'top-right',
-        });
+        toast.error(
+          `Failed to add employee: ${
+            error.response?.data?.message || "Unknown error occurred"
+          }`,
+          {
+            duration: 4000,
+            position: "top-right",
+          }
+        );
       }
     }
   };
@@ -121,7 +139,9 @@ const TableView: React.FC = () => {
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Employee Table View</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+        Employee Table View
+      </h1>
       <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
       <button
         onClick={() => setIsModalOpen(true)}
@@ -164,7 +184,9 @@ const TableView: React.FC = () => {
           placeholder="Address"
           className="border p-2 w-full mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600"
         />
-        {errors.address && <p className="text-red-600">{errors.address.message}</p>}
+        {errors.address && (
+          <p className="text-red-600">{errors.address.message}</p>
+        )}
       </Modal>
       <EmployeeTable
         employees={filteredEmployees}
