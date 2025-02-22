@@ -10,6 +10,7 @@ import Modal from "../components/Modal";
 import axios from "axios";
 import { Plus } from "lucide-react";
 import SearchBar from "../components/SearchBar";
+import FilterDropdown, { FilterOption } from "../components/FilterDropdown";
 import { Employee } from "../types/employee";
 import ErrorDisplay from "../components/ErrorDisplay";
 
@@ -25,6 +26,7 @@ const TableView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [employeeList, setEmployeeList] = useState(employees);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentFilter, setCurrentFilter] = useState<FilterOption>("all");
 
   useEffect(() => {
     setEmployeeList(employees);
@@ -34,9 +36,34 @@ const TableView: React.FC = () => {
     setSearchTerm(term);
   };
 
-  const filteredEmployees = employeeList.filter((employee) =>
-    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleFilterChange = (filter: FilterOption) => {
+    setCurrentFilter(filter);
+  };
+
+  const filteredAndSortedEmployees = React.useMemo(() => {
+    let result = employeeList.filter((employee) =>
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    switch (currentFilter) {
+      case "name-asc":
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-desc":
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "email-asc":
+        result.sort((a, b) => a.email.localeCompare(b.email));
+        break;
+      case "email-desc":
+        result.sort((a, b) => b.email.localeCompare(a.email));
+        break;
+      default:
+        break;
+    }
+
+    return result;
+  }, [employeeList, searchTerm, currentFilter]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -138,18 +165,38 @@ const TableView: React.FC = () => {
   if (error) return <ErrorDisplay message={error.message} />;
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
-        Employee Table View
-      </h1>
-      <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="bg-green-600 text-white p-2 mb-4 rounded-md flex items-center hover:bg-green-700 transition-colors"
-      >
-        <Plus size={18} className="mr-2" />
-        Add Employee
-      </button>
+    <div className="p-4 md:p-6 bg-white dark:bg-gray-900 min-h-screen">
+      <div className="mx-auto">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+          Employee Table View
+        </h1>
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="flex-1">
+            <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
+          </div>
+          <div className="sm:w-48">
+            <FilterDropdown
+              currentFilter={currentFilter}
+              onFilterChange={handleFilterChange}
+            />
+          </div>
+        </div>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-green-600 text-white p-2 mb-4 rounded-md flex items-center hover:bg-green-700 transition-colors"
+        >
+          <Plus size={18} className="mr-2" />
+          Add Employee
+        </button>
+        <div className="mt-4">
+          <EmployeeTable
+            employees={filteredAndSortedEmployees}
+            onDelete={handleDelete}
+            onUpdate={handleUpdateEmployee}
+          />
+        </div>
+      </div>
+
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -188,11 +235,6 @@ const TableView: React.FC = () => {
           <p className="text-red-600">{errors.address.message}</p>
         )}
       </Modal>
-      <EmployeeTable
-        employees={filteredEmployees}
-        onDelete={handleDelete}
-        onUpdate={handleUpdateEmployee}
-      />
     </div>
   );
 };
