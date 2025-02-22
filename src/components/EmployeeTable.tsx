@@ -128,62 +128,62 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 
   return (
     <div>
-      <div className="overflow-x-auto pb-5">
-        <table className=" w-full border-collapse border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
+      <div className="w-full overflow-x-auto shadow-md rounded-lg">
+        <table className="w-full min-w-max table-auto">
           <thead className="bg-gray-200 dark:bg-gray-700">
             <tr>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap">
                 Profile Picture
               </th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap">
                 Name
               </th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap hidden sm:table-cell">
                 Phone
               </th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap hidden md:table-cell">
                 Email
               </th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap hidden lg:table-cell">
                 Address
               </th>
-              <th className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+              <th className="p-3 text-left text-gray-800 dark:text-white whitespace-nowrap">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white dark:bg-gray-800">
             {employees.map((employee) => (
               <tr
                 key={employee.id}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-                <td className="border border-gray-300 dark:border-gray-600 p-2 whitespace-nowrap">
+                <td className="p-3 whitespace-nowrap">
                   <img
                     src={
                       employee.profilePicture ||
                       "https://avatar.iran.liara.run/public/boy"
                     }
                     alt={employee.name}
-                    className="w-16 h-16 rounded-full"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full"
                   />
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 p-2 font-medium text-gray-800 dark:text-white whitespace-nowrap">
+                <td className="p-3 font-medium text-gray-800 dark:text-white whitespace-nowrap">
                   {employee.name}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                <td className="p-3 text-gray-800 dark:text-white whitespace-nowrap hidden sm:table-cell">
                   {employee.phone}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                <td className="p-3 text-gray-800 dark:text-white whitespace-nowrap hidden md:table-cell">
                   {employee.email}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 p-2 text-gray-800 dark:text-white whitespace-nowrap">
+                <td className="p-3 text-gray-800 dark:text-white whitespace-nowrap hidden lg:table-cell">
                   {employee.address.street}{" "}
-                  {employee.address.suite ? `(${employee.address.suite})` : ""},{" "}
+                  {employee.address.suite ? `(${employee.address.suite})` : ""},
                   {employee.address.city}, {employee.address.zipcode}
                 </td>
-                <td className="border border-gray-300 dark:border-gray-600 p-2 whitespace-nowrap">
-                  <div className="flex justify-center items-center gap-3">
+                <td className="p-3 whitespace-nowrap">
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => handleEdit(employee)}
                       className="p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors duration-200 group"
