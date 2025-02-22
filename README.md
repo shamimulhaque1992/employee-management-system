@@ -78,7 +78,7 @@ A modern, responsive Employee Management System built with React, TypeScript, an
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/shamimulhaque1992/employee-management-system.git
-   cd employee-management-app
+   cd employee-management-system
    ```
 
 2. **Install Dependencies**
